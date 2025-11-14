@@ -24,8 +24,14 @@ serve(async (req) => {
 
     console.log('Encoding image:', image.name, 'Message length:', message.length);
 
-    // TODO: Replace with your Python backend URL
-    const PYTHON_BACKEND_URL = Deno.env.get('PYTHON_BACKEND_URL') || 'http://localhost:8000';
+    const PYTHON_BACKEND_URL = Deno.env.get('PYTHON_BACKEND_URL');
+    if (!PYTHON_BACKEND_URL) {
+      console.error('PYTHON_BACKEND_URL is not set');
+      return new Response(
+        JSON.stringify({ error: 'Backend not configured', details: 'Set PYTHON_BACKEND_URL secret to your deployed Python backend URL.' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     const backendFormData = new FormData();
     backendFormData.append('image', image);
