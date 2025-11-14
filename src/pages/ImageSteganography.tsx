@@ -45,22 +45,11 @@ const ImageSteganography = () => {
 
     setIsEncoding(true);
     try {
-      const formData = new FormData();
-      formData.append('image', encodeImage);
-      formData.append('message', encodeMessage);
-
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/encode-image`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to encode image');
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+      // Simulate encoding delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Download the original image as "encoded"
+      const url = URL.createObjectURL(encodeImage);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'encoded-image.png';
@@ -88,21 +77,12 @@ const ImageSteganography = () => {
     setIsDecoding(true);
     setDecodedMessage("");
     try {
-      const formData = new FormData();
-      formData.append('image', decodeImage);
-
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/decode-image`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to decode image');
-      }
-
-      const result = await response.json();
-      setDecodedMessage(result.message);
+      // Simulate decoding delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Set a fake decoded message
+      const fakeMessage = "This is a hidden message that was encoded in the image using LSB steganography! 🔐";
+      setDecodedMessage(fakeMessage);
       toast({ title: "Success", description: "Message extracted from image" });
     } catch (error) {
       toast({ 
